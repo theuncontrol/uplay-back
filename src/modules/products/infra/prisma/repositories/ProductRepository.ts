@@ -51,11 +51,11 @@ class ProductRepository implements IProductRepository {
 
     return product;
   }
-  async addToCart({ userId, productsIds }: IAddToCart): Promise<void> {
-    await prisma.user.update({
-      where: { id: userId },
+  async updateCart({ userId, productIds }: IAddToCart): Promise<void> {
+    await prisma.cart.create({
       data: {
-        cart: productsIds,
+        userId,
+        productIds,
       },
     });
   }

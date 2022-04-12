@@ -30,5 +30,5 @@ export interface IEditComment {
 
 export interface IAddToCart {
   userId: string;
-  productsIds: string[];
+  productIds: string[];
 }
