@@ -1,5 +1,5 @@
 <div align="center" id="top"> 
-  <img src="./.github/app.svg" alt="Uplay Back" />
+  <img src="./.github/app.svg" alt="Uplay Back"/>
 
   &#xa0;
 
@@ -50,9 +50,7 @@ Describe your project
 
 ## :sparkles: Features ##
 
-:heavy_check_mark: Feature 1;\
-:heavy_check_mark: Feature 2;\
-:heavy_check_mark: Feature 3;
+:heavy_check_mark: Make secure payments;\
 
 ## :rocket: Technologies ##
 
@@ -60,6 +58,7 @@ The following tools were used in this project:
 
 - [Node.js](https://nodejs.org/en/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [Express](https://expressjs.com/pt-br/)
 
 ## :white_check_mark: Requirements ##
 
@@ -88,7 +87,7 @@ $ yarn start
 This project is under license from MIT. For more details, see the [LICENSE](LICENSE.md) file.
 
 
-Made with :heart: by <a href="https://github.com/aleeixoj" target="_blank">{{YOUR_NAME}}</a>
+Made with :heart: by <a href="https://github.com/aleeixoj" target="_blank">Aleixo</a>
 
 &#xa0;
 
