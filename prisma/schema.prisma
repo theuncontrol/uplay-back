@@ -27,8 +27,8 @@ model User {
   favorites  Favorites?
   Comments   Comments[]
   cart       Cart?
-  Orders     Orders[]     @relation(fields: [ordersId], references: [id])
   ordersId   String[]     @db.ObjectId
+  Orders     Orders[]
 }
 
 model Favorites {
@@ -134,8 +134,8 @@ model Orders {
   statusId       String    @unique @db.ObjectId
   userId         String?   @db.ObjectId
   User           User?     @relation(fields: [userId], references: [id])
-  productId      String[]  @db.ObjectId
-  Product        Product[] @relation(fields: [productId], references: [id])
+  productsIds    String[]  @db.ObjectId
+  Products       Product[] @relation(fields: [productsIds], references: [id])
   orderNumber    String
   trackingNumber String
   totalPrice     String
