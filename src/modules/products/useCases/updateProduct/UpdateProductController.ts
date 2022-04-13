@@ -6,7 +6,7 @@ import { UpdateProductUseCase } from './UpdateProductUseCase';
 class UpdateProductController {
   async handle(request: Request, response: Response): Promise<Response> {
     const updateProductUseCase = container.resolve(UpdateProductUseCase);
-    const { id, description, name, price, warranty, comments, note } =
+    const { id, description, name, price, warranty, comments, note, stock } =
       request.body;
 
     const product = await updateProductUseCase.execute({
@@ -17,6 +17,7 @@ class UpdateProductController {
       warranty,
       comments,
       note,
+      stock,
     });
 
     return response.status(201).json(product);

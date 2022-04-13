@@ -5,6 +5,9 @@ export interface ICreateProduct {
   warranty: string;
   color: string;
   reference: string;
+  code: string;
+  stock: string;
+  brand: string;
 }
 
 export interface IUpdateProduct {
@@ -13,6 +16,7 @@ export interface IUpdateProduct {
   price: string;
   description: string;
   warranty: string;
+  stock: string;
   comments?: [];
   note?: string;
 }
@@ -30,5 +34,5 @@ export interface IEditComment {
 
 export interface IAddToCart {
   userId: string;
-  productIds: string[];
+  productsIds: string[];
 }

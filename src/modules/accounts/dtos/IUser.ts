@@ -24,8 +24,11 @@ interface IUpdateUser {
   phone: string;
   address: [];
   profileId?: string;
-  favorites?: [];
-  cart?: [];
+}
+
+export interface IAddToFavorite {
+  userId: string;
+  productsIds: string[];
 }
 
 export { IAddress, ICreateUser, IUpdateUser };

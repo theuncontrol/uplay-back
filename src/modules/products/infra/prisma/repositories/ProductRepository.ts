@@ -1,4 +1,5 @@
 import { prisma } from 'database/prismaClient';
+import _ from 'lodash';
 
 import {
   IAddToCart,
@@ -6,7 +7,7 @@ import {
   IUpdateProduct,
 } from '@modules/products/dtos/IProduct';
 import { IProductRepository } from '@modules/products/repositories/IProductRepository';
-import { Product } from '@prisma/client';
+import { Cart, Product } from '@prisma/client';
 
 class ProductRepository implements IProductRepository {
   async delete(id: string): Promise<void> {
@@ -18,10 +19,11 @@ class ProductRepository implements IProductRepository {
     name,
     price,
     warranty,
+    stock,
   }: IUpdateProduct): Promise<Product> {
     const updateProduct = await prisma.product.update({
       where: { id },
-      data: { description, name, price, warranty },
+      data: { description, name, price, warranty, stock },
     });
 
     return updateProduct;
@@ -37,6 +39,9 @@ class ProductRepository implements IProductRepository {
     price,
     color,
     reference,
+    code,
+    stock,
+    brand,
   }: ICreateProduct): Promise<Product> {
     const product = await prisma.product.create({
       data: {
@@ -46,18 +51,36 @@ class ProductRepository implements IProductRepository {
         price,
         color,
         reference,
+        code,
+        stock,
+        brand,
       },
     });
 
     return product;
   }
-  async updateCart({ userId, productIds }: IAddToCart): Promise<void> {
-    await prisma.cart.create({
+  async addToCart({ userId, productsIds }: IAddToCart): Promise<void> {
+    await prisma.cart.update({
+      where: { userId },
       data: {
-        userId,
-        productIds,
+        productsIds,
       },
     });
+  }
+
+  async removeToCart(userId: string, productId: string): Promise<void> {
+    const cart = await prisma.cart.findFirst({ where: { userId } });
+
+    if (!_.isNil(cart)) {
+      cart.productsIds = _.filter(cart.productsIds, (id) => id !== productId);
+      console.log('cart>>', cart);
+      await prisma.cart.update({
+        where: { userId },
+        data: {
+          productsIds: cart.productsIds,
+        },
+      });
+    }
   }
 }
 

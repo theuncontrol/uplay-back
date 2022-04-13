@@ -8,6 +8,7 @@ interface IProductRepository {
   update(data: IUpdateProduct): Promise<Product>;
   delete(id: string): Promise<void>;
   addToCart(data: IAddToCart): Promise<void>;
+  removeToCart(userId: string, productId: string): Promise<void>;
 }
 
 export { IProductRepository };

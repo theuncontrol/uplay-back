@@ -24,17 +24,27 @@ model User {
   UserToken  UserTokens[]
   profileId  String?      @db.ObjectId
   address    Json?
-  favorites  Json?
+  favorites  Favorites?
   Comments   Comments[]
   cart       Cart?
+  Orders     Orders[]     @relation(fields: [ordersId], references: [id])
+  ordersId   String[]     @db.ObjectId
+}
+
+model Favorites {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @unique @db.ObjectId
+  products    Product[] @relation(fields: [productsIds], references: [id])
+  productsIds String[]  @db.ObjectId
 }
 
 model Cart {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  user       User      @relation(fields: [userId], references: [id])
-  userId     String    @unique @db.ObjectId
-  products   Product[] @relation(fields: [productIds], references: [id])
-  productIds String[]  @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @unique @db.ObjectId
+  products    Product[] @relation(fields: [productsIds], references: [id])
+  productsIds String[]  @db.ObjectId
 }
 
 model Resources {
@@ -75,8 +85,11 @@ model Product {
   price         String
   description   String
   warranty      String
+  brand         String
   color         String
   reference     String
+  code          String
+  stock         String
   created_at    DateTime        @default(now())
   updated_at    DateTime        @updatedAt
   comments      Comments[]
@@ -84,6 +97,10 @@ model Product {
   product_image Product_image[]
   Cart          Cart[]          @relation(fields: [cartId], references: [id])
   cartId        String[]        @db.ObjectId
+  Favorites     Favorites[]     @relation(fields: [favoritesId], references: [id])
+  favoritesId   String[]        @db.ObjectId
+  Orders        Orders[]        @relation(fields: [ordersId], references: [id])
+  ordersId      String[]        @db.ObjectId
 }
 
 model Product_image {
@@ -102,4 +119,26 @@ model Comments {
   Product    Product? @relation(fields: [productId], references: [id])
   productId  String?  @db.ObjectId
   comment    String
+}
+
+model Status {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  key    String
+  value  String
+  Orders Orders[]
+}
+
+model Orders {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  status         Status?   @relation(fields: [statusId], references: [id])
+  statusId       String    @unique @db.ObjectId
+  userId         String?   @db.ObjectId
+  User           User?     @relation(fields: [userId], references: [id])
+  productId      String[]  @db.ObjectId
+  Product        Product[] @relation(fields: [productId], references: [id])
+  orderNumber    String
+  trackingNumber String
+  totalPrice     String
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
 }

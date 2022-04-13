@@ -18,6 +18,7 @@ class UpdateProductUseCase {
     warranty,
     comments,
     note,
+    stock,
   }: IUpdateProduct): Promise<Product> {
     const updateProduct = await this.productRepository.update({
       id,
@@ -27,6 +28,7 @@ class UpdateProductUseCase {
       warranty,
       comments,
       note,
+      stock,
     });
     return updateProduct;
   }

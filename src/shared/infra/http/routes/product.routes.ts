@@ -8,6 +8,7 @@ import { CreateProductController } from '@modules/products/useCases/createProduc
 import { DeleteProductController } from '@modules/products/useCases/deleteProduct/DeleteProductController';
 import { EditCommentController } from '@modules/products/useCases/editComment/EditCommentController';
 import { FindAllProductsController } from '@modules/products/useCases/findAll/FindAllProductsController';
+import { RemoveToCartController } from '@modules/products/useCases/RemoveToCart/RemoveToCartController';
 import { UpdateProductController } from '@modules/products/useCases/updateProduct/UpdateProductController';
 
 import { ensureAdmin } from '../middlewares/ensureAdmin';
@@ -21,10 +22,12 @@ const createProductController = new CreateProductController();
 const findAllProductsController = new FindAllProductsController();
 const updateProductController = new UpdateProductController();
 const deleteProductController = new DeleteProductController();
-const addToCartController = new AddToCartController();
 
 const createCommentController = new CreateCommentController();
 const editCommentController = new EditCommentController();
+
+const addToCartController = new AddToCartController();
+const removeToCartController = new RemoveToCartController();
 
 productRoutes.post(
   '/create',
@@ -57,6 +60,11 @@ productRoutes.post(
   '/addToCart',
   ensureAuthenticated,
   addToCartController.handle
+);
+productRoutes.put(
+  '/removeToCart',
+  ensureAuthenticated,
+  removeToCartController.handle
 );
 
 export { productRoutes };

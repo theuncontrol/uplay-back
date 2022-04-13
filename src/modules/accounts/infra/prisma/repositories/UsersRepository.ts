@@ -1,6 +1,11 @@
 import { prisma } from 'database/prismaClient';
+import _ from 'lodash';
 
-import { ICreateUser, IUpdateUser } from '@modules/accounts/dtos/IUser';
+import {
+  IAddToFavorite,
+  ICreateUser,
+  IUpdateUser,
+} from '@modules/accounts/dtos/IUser';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { User } from '@prisma/client';
 
@@ -12,8 +17,6 @@ class UsersRepository implements IUsersRepository {
     name,
     phone,
     profileId,
-    favorites,
-    cart,
   }: IUpdateUser): Promise<User> {
     const updatedUser = await prisma.user.update({
       where: { id },
@@ -23,8 +26,6 @@ class UsersRepository implements IUsersRepository {
         name,
         phone,
         profileId,
-        favorites,
-        cart,
       },
     });
 
@@ -52,8 +53,19 @@ class UsersRepository implements IUsersRepository {
         profileId: profile?.id,
       },
       include: {
-        // Address: true,
         profile: { include: { resources: true } },
+      },
+    });
+
+    await prisma.cart.create({
+      data: {
+        userId: createdUser.id,
+      },
+    });
+
+    await prisma.favorites.create({
+      data: {
+        userId: createdUser.id,
       },
     });
 
@@ -68,7 +80,11 @@ class UsersRepository implements IUsersRepository {
   }
   async findAll(): Promise<User[]> {
     const users = await prisma.user.findMany({
-      include: { profile: { include: { resources: true } } },
+      include: {
+        profile: { include: { resources: true } },
+        cart: true,
+        favorites: true,
+      },
     });
     return users;
   }
@@ -97,6 +113,33 @@ class UsersRepository implements IUsersRepository {
   async updateAvatar(id: string, avatar?: string): Promise<User> {
     const user = await prisma.user.update({ where: { id }, data: { avatar } });
     return user;
+  }
+
+  async addToFavorite({ userId, productsIds }: IAddToFavorite): Promise<void> {
+    await prisma.favorites.update({
+      where: { userId },
+      data: {
+        productsIds,
+      },
+    });
+  }
+
+  async removeToFavorite(userId: string, productId: string): Promise<void> {
+    const favorites = await prisma.favorites.findFirst({ where: { userId } });
+
+    if (!_.isNil(favorites)) {
+      favorites.productsIds = _.filter(
+        favorites.productsIds,
+        (id) => id !== productId
+      );
+
+      await prisma.favorites.update({
+        where: { userId },
+        data: {
+          productsIds: favorites.productsIds,
+        },
+      });
+    }
   }
 }
 

@@ -17,6 +17,9 @@ class CreateProductUseCase {
     warranty,
     color,
     reference,
+    code,
+    stock,
+    brand,
   }: ICreateProduct): Promise<Product> {
     const product = await this.productRepository.create({
       name,
@@ -25,6 +28,9 @@ class CreateProductUseCase {
       warranty,
       color,
       reference,
+      code,
+      stock,
+      brand,
     });
 
     return product;
