@@ -79,6 +79,15 @@ model UserTokens {
   user_id       String?  @db.ObjectId
 }
 
+model Categories {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  image      String?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  Product    Product[]
+}
+
 model Product {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
   name          String
@@ -101,6 +110,8 @@ model Product {
   favoritesId   String[]        @db.ObjectId
   Orders        Orders[]        @relation(fields: [ordersId], references: [id])
   ordersId      String[]        @db.ObjectId
+  category      Categories?     @relation(fields: [categoryId], references: [id])
+  categoryId    String?         @db.ObjectId
 }
 
 model Product_image {

@@ -9,8 +9,10 @@ import { IProfileRepository } from '@modules/accounts/repositories/IProfileRepos
 import { IResourcesRepository } from '@modules/accounts/repositories/IResourcesRepository';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
+import { CategoriesRepository } from '@modules/products/infra/prisma/repositories/CategoriesRepository';
 import { CommentsRepository } from '@modules/products/infra/prisma/repositories/CommentsRepository';
 import { ProductRepository } from '@modules/products/infra/prisma/repositories/ProductRepository';
+import { ICategoriesRepository } from '@modules/products/repositories/ICategoriesRepository';
 import { ICommentsRepository } from '@modules/products/repositories/ICommentsRepository';
 import { IProductRepository } from '@modules/products/repositories/IProductRepository';
 
@@ -42,4 +44,9 @@ container.registerSingleton<IProductRepository>(
 container.registerSingleton<ICommentsRepository>(
   'CommentsRepository',
   CommentsRepository
+);
+
+container.registerSingleton<ICategoriesRepository>(
+  'CategoriesRepository',
+  CategoriesRepository
 );

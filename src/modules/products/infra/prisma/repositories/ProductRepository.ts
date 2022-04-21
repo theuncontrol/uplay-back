@@ -10,6 +10,15 @@ import { IProductRepository } from '@modules/products/repositories/IProductRepos
 import { Cart, Product } from '@prisma/client';
 
 class ProductRepository implements IProductRepository {
+  async findById(id: string): Promise<Product | null> {
+    const product = await prisma.product.findUnique({ where: { id } });
+    return product;
+  }
+  async findAllByCategoryId(categoryId: string): Promise<Product[]> {
+    const product = await prisma.product.findMany({ where: { categoryId } });
+
+    return product;
+  }
   async delete(id: string): Promise<void> {
     await prisma.product.delete({ where: { id } });
   }
@@ -42,6 +51,7 @@ class ProductRepository implements IProductRepository {
     code,
     stock,
     brand,
+    categoryId,
   }: ICreateProduct): Promise<Product> {
     const product = await prisma.product.create({
       data: {
@@ -54,6 +64,7 @@ class ProductRepository implements IProductRepository {
         code,
         stock,
         brand,
+        categoryId,
       },
     });
 

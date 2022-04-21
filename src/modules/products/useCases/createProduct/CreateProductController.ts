@@ -16,6 +16,7 @@ class CreateProductController {
       code,
       stock,
       brand,
+      categoryId,
     } = request.body;
 
     const create = await createProductUseCase.execute({
@@ -28,6 +29,7 @@ class CreateProductController {
       code,
       stock,
       brand,
+      categoryId,
     });
     return response.status(201).json(create);
   }

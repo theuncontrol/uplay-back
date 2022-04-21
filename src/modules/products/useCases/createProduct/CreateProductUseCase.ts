@@ -9,7 +9,7 @@ class CreateProductUseCase {
   constructor(
     @inject('ProductRepository')
     private productRepository: IProductRepository
-  ) {}
+  ) { }
   async execute({
     name,
     description,
@@ -20,6 +20,7 @@ class CreateProductUseCase {
     code,
     stock,
     brand,
+    categoryId,
   }: ICreateProduct): Promise<Product> {
     const product = await this.productRepository.create({
       name,
@@ -31,6 +32,7 @@ class CreateProductUseCase {
       code,
       stock,
       brand,
+      categoryId,
     });
 
     return product;

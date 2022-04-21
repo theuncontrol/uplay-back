@@ -8,6 +8,7 @@ export interface ICreateProduct {
   code: string;
   stock: string;
   brand: string;
+  categoryId: string;
 }
 
 export interface IUpdateProduct {
@@ -35,4 +36,9 @@ export interface IEditComment {
 export interface IAddToCart {
   userId: string;
   productsIds: string[];
+}
+
+export interface ICreateCategory {
+  name: string;
+  image_file: string | undefined;
 }
