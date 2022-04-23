@@ -11,11 +11,20 @@ import { Cart, Product } from '@prisma/client';
 
 class ProductRepository implements IProductRepository {
   async findById(id: string): Promise<Product | null> {
-    const product = await prisma.product.findUnique({ where: { id } });
+    const product = await prisma.product.findUnique({
+      where: { id },
+      include: { comments: { include: { user: true } }, product_image: true },
+    });
     return product;
   }
-  async findAllByCategoryId(categoryId: string): Promise<Product[]> {
-    const product = await prisma.product.findMany({ where: { categoryId } });
+  async findAllByCategoryId(
+    categoryId: string,
+    limit: number
+  ): Promise<Product[]> {
+    const product = await prisma.product.findMany({
+      where: { categoryId },
+      take: limit,
+    });
 
     return product;
   }
@@ -37,8 +46,11 @@ class ProductRepository implements IProductRepository {
 
     return updateProduct;
   }
-  async findAll(): Promise<Product[]> {
-    const products = await prisma.product.findMany({});
+  async findAll(limit: number): Promise<Product[]> {
+    const products = await prisma.product.findMany({
+      include: { comments: true, product_image: true },
+      take: limit,
+    });
     return products;
   }
   async create({

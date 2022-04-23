@@ -8,9 +8,9 @@ class FindAllProductsUseCase {
   constructor(
     @inject('ProductRepository')
     private productRepository: IProductRepository
-  ) {}
-  async execute(): Promise<Product[]> {
-    const products = await this.productRepository.findAll();
+  ) { }
+  async execute(limit = 1000): Promise<Product[]> {
+    const products = await this.productRepository.findAll(Number(limit));
 
     return products;
   }

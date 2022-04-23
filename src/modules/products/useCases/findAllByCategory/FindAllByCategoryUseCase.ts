@@ -9,9 +9,10 @@ class FindAllByCategoryUseCase {
     @inject('ProductRepository')
     private productRepository: IProductRepository
   ) { }
-  async execute(categoryId: string): Promise<Product[]> {
+  async execute(categoryId: string, limit = 1000): Promise<Product[]> {
     const products = await this.productRepository.findAllByCategoryId(
-      categoryId
+      categoryId,
+      Number(limit)
     );
     return products;
   }
