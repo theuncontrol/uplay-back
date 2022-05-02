@@ -4,6 +4,7 @@ import multer from 'multer';
 import uploadConfig from '@config/upload';
 import { AddToFavoriteController } from '@modules/accounts/useCases/addToFavorite/AddToFavoriteController';
 import { CreateUserController } from '@modules/accounts/useCases/createUser/CreateUserController';
+import { FillUserController } from '@modules/accounts/useCases/fillUser/FillUserController';
 import { FindUserController } from '@modules/accounts/useCases/findUsers/FindUsersController';
 import { RemoveToFavoriteController } from '@modules/accounts/useCases/RemoveToFavorite/RemoveToFavoriteController';
 import { UpdateUserController } from '@modules/accounts/useCases/updateUser/UpdateUserController';
@@ -48,5 +49,7 @@ userRoutes.put(
   ensureAuthenticated,
   removeToFavoriteController.handle
 );
+
+userRoutes.get('/fill', ensureAuthenticated, new FillUserController().handle);
 
 export { userRoutes };

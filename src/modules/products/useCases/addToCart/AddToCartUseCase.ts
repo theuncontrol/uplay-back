@@ -4,7 +4,8 @@ import { IProductRepository } from '@modules/products/repositories/IProductRepos
 
 interface IRequest {
   userId: string;
-  productsIds: string[];
+  productId: string;
+  qtn: number;
 }
 
 @injectable()
@@ -12,9 +13,9 @@ class AddToCartUseCase {
   constructor(
     @inject('ProductRepository')
     private productRepository: IProductRepository
-  ) {}
-  async execute({ userId, productsIds }: IRequest): Promise<void> {
-    await this.productRepository.addToCart({ userId, productsIds });
+  ) { }
+  async execute({ userId, productId, qtn }: IRequest): Promise<void> {
+    await this.productRepository.addToCart({ userId, productId, qtn });
   }
 }
 export { AddToCartUseCase };

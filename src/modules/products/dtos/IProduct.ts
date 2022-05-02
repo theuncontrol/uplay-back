@@ -35,7 +35,8 @@ export interface IEditComment {
 
 export interface IAddToCart {
   userId: string;
-  productsIds: string[];
+  productId: string;
+  qtn: number;
 }
 
 export interface ICreateCategory {

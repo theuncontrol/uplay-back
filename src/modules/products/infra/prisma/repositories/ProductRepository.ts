@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { prisma } from 'database/prismaClient';
 import _ from 'lodash';
 
@@ -8,6 +9,7 @@ import {
 } from '@modules/products/dtos/IProduct';
 import { IProductRepository } from '@modules/products/repositories/IProductRepository';
 import { Cart, Product } from '@prisma/client';
+import { PrismaClientValidationError } from '@prisma/client/runtime';
 
 class ProductRepository implements IProductRepository {
   async findById(id: string): Promise<Product | null> {
@@ -82,25 +84,66 @@ class ProductRepository implements IProductRepository {
 
     return product;
   }
-  async addToCart({ userId, productsIds }: IAddToCart): Promise<void> {
-    await prisma.cart.update({
+  async addToCart({ userId, productId, qtn }: IAddToCart): Promise<void> {
+    const cart = await prisma.cart.findFirst({
       where: { userId },
-      data: {
-        productsIds,
-      },
+      include: { productsQtn: true },
     });
-  }
 
-  async removeToCart(userId: string, productId: string): Promise<void> {
-    const cart = await prisma.cart.findFirst({ where: { userId } });
+    const productsQtns = await prisma.productQtn.findFirst({
+      where: { cartId: cart?.id, productId },
+    });
 
-    if (!_.isNil(cart)) {
-      cart.productsIds = _.filter(cart.productsIds, (id) => id !== productId);
-      console.log('cart>>', cart);
+    if (_.isNil(productsQtns)) {
+      delete cart?.id;
+      cart?.productsIds.push(productId);
       await prisma.cart.update({
         where: { userId },
         data: {
-          productsIds: cart.productsIds,
+          ...cart,
+          productsQtn: {
+            create: {
+              productId,
+              qtn,
+            },
+          },
+        },
+      });
+    } else {
+      await prisma.cart.update({
+        where: { userId },
+        data: {
+          productsQtn: {
+            update: {
+              where: { productId },
+              data: {
+                qtn,
+              },
+            },
+          },
+        },
+      });
+    }
+  }
+
+  async removeToCart(userId: string, productId: string): Promise<void> {
+    const cart = await prisma.cart.findFirst({
+      where: { userId },
+      include: { productsQtn: true },
+    });
+    const productQtn = await prisma.productQtn.findFirst({
+      where: { cartId: cart?.id, productId },
+    });
+
+    if (productQtn) {
+      await prisma.productQtn.delete({
+        where: { productId },
+      });
+      cart?.productsIds = _.filter(cart?.productsIds, (id) => id !== productId);
+      await prisma.cart.update({
+        where: { userId },
+        data: {
+          productsIds: cart?.productsIds,
         },
       });
     }

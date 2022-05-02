@@ -74,7 +74,11 @@ class UsersRepository implements IUsersRepository {
   async findById(id: string): Promise<User | null> {
     const user = await prisma.user.findUnique({
       where: { id },
-      include: { profile: true },
+      include: {
+        profile: true,
+        cart: { include: { products: true, productsQtn: true } },
+        favorites: true,
+      },
     });
     return user;
   }
@@ -82,7 +86,7 @@ class UsersRepository implements IUsersRepository {
     const users = await prisma.user.findMany({
       include: {
         profile: { include: { resources: true } },
-        cart: true,
+        cart: { include: { productsQtn: true, products: true } },
         favorites: true,
       },
     });
