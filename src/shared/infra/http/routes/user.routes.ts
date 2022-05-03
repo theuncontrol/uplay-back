@@ -15,7 +15,7 @@ import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
 
 const userRoutes = Router();
 
-const uploadAvatar = multer(uploadConfig.upload('./tmp/avatar'));
+const uploadAvatar = multer(uploadConfig);
 
 const createUserController = new CreateUserController();
 const findUserController = new FindUserController();
@@ -23,10 +23,11 @@ const updateUserAvatarController = new UpdateUserAvatarController();
 const updateUserController = new UpdateUserController();
 const addToFavoriteController = new AddToFavoriteController();
 const removeToFavoriteController = new RemoveToFavoriteController();
+const fillUserController = new FillUserController();
 
 userRoutes.post('/create', createUserController.handle);
 userRoutes.get(
-  '/getAll',
+  '/',
   ensureAuthenticated,
   ensureAdmin,
   findUserController.handle
@@ -50,6 +51,6 @@ userRoutes.put(
   removeToFavoriteController.handle
 );
 
-userRoutes.get('/fill', ensureAuthenticated, new FillUserController().handle);
+userRoutes.get('/profile', ensureAuthenticated, fillUserController.handle);
 
 export { userRoutes };

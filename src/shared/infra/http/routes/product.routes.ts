@@ -19,7 +19,7 @@ import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
 
 const productRoutes = Router();
 
-const uploadAvatar = multer(uploadConfig.upload('./tmp/avatar'));
+const uploadImage = multer(uploadConfig);
 
 const createProductController = new CreateProductController();
 const findAllProductsController = new FindAllProductsController();

@@ -29,6 +29,8 @@ model User {
   cart       Cart?
   ordersId   String[]     @db.ObjectId
   Orders     Orders[]
+
+
 }
 
 model Favorites {

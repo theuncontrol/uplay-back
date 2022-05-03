@@ -8,7 +8,7 @@ import { FindCategoriesController } from '@modules/products/useCases/findCategor
 import { ensureAdmin } from '../middlewares/ensureAdmin';
 import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
 
-const uploadCategoryImage = multer(uploadConfig.upload('./tmp/categories'));
+const uploadCategoryImage = multer(uploadConfig);
 const createCategoryController = new CreateCategoryController();
 const findCategoriesController = new FindCategoriesController();
 
