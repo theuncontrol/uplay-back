@@ -43,7 +43,6 @@
     "@types/uuid": "^8.3.0",
     "aws-sdk": "^2.1126.0",
     "bcrypt": "^5.0.1",
-    "class-transformer": "^0.5.1",
     "cors": "^2.8.5",
     "dayjs": "^1.10.8",
     "dotenv": "^16.0.0",
@@ -56,7 +55,7 @@
     "mongodb": "^4.4.0",
     "multer": "^1.4.4",
     "nodemailer": "^6.7.3",
-    "prisma": "^3.10.0",
+    "prisma": "^3.13.0",
     "reflect-metadata": "^0.1.13",
     "tsyringe": "^4.6.0",
     "uuid": "^8.3.2"

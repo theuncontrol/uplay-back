@@ -6,6 +6,7 @@ interface IRequest {
   userId: string;
   productId: string;
   qtn: number;
+  price: number;
 }
 
 @injectable()
@@ -14,8 +15,14 @@ class AddToCartUseCase {
     @inject('ProductRepository')
     private productRepository: IProductRepository
   ) { }
-  async execute({ userId, productId, qtn }: IRequest): Promise<void> {
-    await this.productRepository.addToCart({ userId, productId, qtn });
+  async execute({ userId, productId, qtn, price }: IRequest): Promise<void> {
+    const totalPrice = price * qtn;
+    await this.productRepository.addToCart({
+      userId,
+      productId,
+      qtn,
+      totalPrice,
+    });
   }
 }
 export { AddToCartUseCase };

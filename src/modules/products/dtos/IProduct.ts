@@ -1,6 +1,6 @@
 export interface ICreateProduct {
   name: string;
-  price: string;
+  price: number;
   description: string;
   warranty: string;
   color: string;
@@ -14,7 +14,7 @@ export interface ICreateProduct {
 export interface IUpdateProduct {
   id: string;
   name: string;
-  price: string;
+  price: number;
   description: string;
   warranty: string;
   stock: string;
@@ -37,6 +37,7 @@ export interface IAddToCart {
   userId: string;
   productId: string;
   qtn: number;
+  totalPrice: number;
 }
 
 export interface ICreateCategory {

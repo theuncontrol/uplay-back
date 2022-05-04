@@ -8,8 +8,7 @@ import {
   IUpdateProduct,
 } from '@modules/products/dtos/IProduct';
 import { IProductRepository } from '@modules/products/repositories/IProductRepository';
-import { Cart, Product } from '@prisma/client';
-import { PrismaClientValidationError } from '@prisma/client/runtime';
+import { Product } from '@prisma/client';
 
 class ProductRepository implements IProductRepository {
   async findById(id: string): Promise<Product | null> {
@@ -84,7 +83,12 @@ class ProductRepository implements IProductRepository {
 
     return product;
   }
-  async addToCart({ userId, productId, qtn }: IAddToCart): Promise<void> {
+  async addToCart({
+    userId,
+    productId,
+    qtn,
+    totalPrice,
+  }: IAddToCart): Promise<void> {
     const cart = await prisma.cart.findFirst({
       where: { userId },
       include: { productsQtn: true },
@@ -105,6 +109,7 @@ class ProductRepository implements IProductRepository {
             create: {
               productId,
               qtn,
+              totalPrice,
             },
           },
         },
@@ -118,6 +123,7 @@ class ProductRepository implements IProductRepository {
               where: { productId },
               data: {
                 qtn,
+                totalPrice,
               },
             },
           },

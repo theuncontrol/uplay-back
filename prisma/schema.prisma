@@ -27,10 +27,8 @@ model User {
   favorites  Favorites?
   Comments   Comments[]
   cart       Cart?
-  ordersId   String[]     @db.ObjectId
+  ordersId   String[]
   Orders     Orders[]
-
-
 }
 
 model Favorites {
@@ -42,11 +40,12 @@ model Favorites {
 }
 
 model ProductQtn {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  productId String  @unique @db.ObjectId
-  qtn       Int
-  Cart      Cart?   @relation(fields: [cartId], references: [id])
-  cartId    String? @db.ObjectId
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  productId  String  @unique @db.ObjectId
+  qtn        Int
+  totalPrice Float?
+  Cart       Cart?   @relation(fields: [cartId], references: [id])
+  cartId     String? @db.ObjectId
 }
 
 model Cart {
@@ -100,9 +99,9 @@ model Categories {
 }
 
 model Product {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
   name          String
-  price         String
+  price         Float
   description   String
   warranty      String
   brand         String
@@ -110,22 +109,22 @@ model Product {
   reference     String
   code          String
   stock         String
-  created_at    DateTime        @default(now())
-  updated_at    DateTime        @updatedAt
+  created_at    DateTime       @default(now())
+  updated_at    DateTime       @updatedAt
   comments      Comments[]
   note          String?
-  product_image Product_image[]
-  Cart          Cart[]          @relation(fields: [cartId], references: [id])
-  cartId        String[]        @db.ObjectId
-  Favorites     Favorites[]     @relation(fields: [favoritesId], references: [id])
-  favoritesId   String[]        @db.ObjectId
-  Orders        Orders[]        @relation(fields: [ordersId], references: [id])
-  ordersId      String[]        @db.ObjectId
-  category      Categories?     @relation(fields: [categoryId], references: [id])
-  categoryId    String?         @db.ObjectId
+  product_image ProductImage[]
+  Cart          Cart[]         @relation(fields: [cartId], references: [id])
+  cartId        String[]       @db.ObjectId
+  Favorites     Favorites[]    @relation(fields: [favoritesId], references: [id])
+  favoritesId   String[]       @db.ObjectId
+  Orders        Orders[]       @relation(fields: [ordersId], references: [id])
+  ordersId      String[]       @db.ObjectId
+  category      Categories?    @relation(fields: [categoryId], references: [id])
+  categoryId    String?        @db.ObjectId
 }
 
-model Product_image {
+model ProductImage {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   product    Product? @relation(references: [id], fields: [productId])
   productId  String?  @db.ObjectId

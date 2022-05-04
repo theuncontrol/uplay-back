@@ -4,9 +4,10 @@ import 'dotenv/config';
 import 'express-async-errors';
 
 import '@shared/container';
-import path from 'path';
+
 import swaggerUi from 'swagger-ui-express';
 
+import upload from '@config/upload';
 import { AppError } from '@shared/errors/AppError';
 import { router } from '@shared/infra/http/routes';
 
@@ -20,9 +21,10 @@ app.use(cors());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use('/api/v1', router);
+app.use('/api/v1/avatar', express.static(`${upload.tmpFolder}/avatar`));
 app.use(
-  '/api/v1/tmp',
-  express.static(path.resolve(__dirname, '..', '..', '..', '..', 'tmp'))
+  '/api/v1/product/image',
+  express.static(`${upload.tmpFolder}/products`)
 );
 
 app.use(

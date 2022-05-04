@@ -13,13 +13,14 @@ import { FindAllByCategoryController } from '@modules/products/useCases/findAllB
 import { FindByIdController } from '@modules/products/useCases/findById/FindByIdController';
 import { RemoveToCartController } from '@modules/products/useCases/RemoveToCart/RemoveToCartController';
 import { UpdateProductController } from '@modules/products/useCases/updateProduct/UpdateProductController';
+import { UploadProductImagesController } from '@modules/products/useCases/uploadProductImages/UploadProductImagesController';
 
 import { ensureAdmin } from '../middlewares/ensureAdmin';
 import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
 
 const productRoutes = Router();
 
-const uploadImage = multer(uploadConfig);
+const upload = multer(uploadConfig);
 
 const createProductController = new CreateProductController();
 const findAllProductsController = new FindAllProductsController();
@@ -34,11 +35,21 @@ const removeToCartController = new RemoveToCartController();
 const findAllByCategoryId = new FindAllByCategoryController();
 const findByIdController = new FindByIdController();
 
+const uploadProductImagesController = new UploadProductImagesController();
+
 productRoutes.post(
   '/create',
   ensureAuthenticated,
   ensureAdmin,
   createProductController.handle
+);
+
+productRoutes.post(
+  '/images/:id',
+  ensureAuthenticated,
+  ensureAdmin,
+  upload.array('images'),
+  uploadProductImagesController.handle
 );
 
 productRoutes.get('/all', findAllProductsController.handle);

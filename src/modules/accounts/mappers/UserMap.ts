@@ -1,26 +1,41 @@
-import { instanceToInstance } from 'class-transformer';
-
 import { User } from '@prisma/client';
 
 import { IUserResponseDTO } from '../dtos/IUserResponseDTO';
 
 class UserMap {
+  static avatar_url(avatar: string | null): string {
+    switch (process.env.disk) {
+      case 'local':
+        return `${process.env.APP_API_URL}/avatar/${avatar}`;
+      case 's3':
+        return `${process.env.AWS_BUCKET_URL}/avatar/${avatar}`;
+      default:
+        return '';
+    }
+  }
   static toDTO({
     email,
     name,
     id,
     avatar,
-    driver_license,
-    avatar_url,
+    phone,
+    address,
+    cart,
+    profile,
+    favorites,
   }: User): IUserResponseDTO {
-    const user = instanceToInstance({
+    const user = {
+      id,
       email,
       name,
-      id,
+      phone,
       avatar,
-      driver_license,
-      avatar_url,
-    });
+      address,
+      profile,
+      cart,
+      favorites,
+      avatar_url: this.avatar_url(avatar),
+    };
     return user;
   }
 }
