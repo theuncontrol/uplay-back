@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
+import { User } from '@prisma/client';
 import { IStorageProvider } from '@shared/container/providers/StorageProvider/IStorageProvider';
 
 interface IRequest {
@@ -16,7 +17,7 @@ class UpdateUserAvatarUseCase {
     @inject('StorageProvider')
     private storageProvider: IStorageProvider
   ) { }
-  async execute({ user_id, avatar_file }: IRequest): Promise<void> {
+  async execute({ user_id, avatar_file }: IRequest): Promise<User> {
     const user = await this.usersRepository.findById(user_id);
 
     if (user?.avatar) {
@@ -24,7 +25,12 @@ class UpdateUserAvatarUseCase {
     }
     await this.storageProvider.save(avatar_file, 'avatar');
 
-    await this.usersRepository.updateAvatar(user_id, avatar_file);
+    const returnUser = await this.usersRepository.updateAvatar(
+      user_id,
+      avatar_file
+    );
+
+    return returnUser;
   }
 }
 

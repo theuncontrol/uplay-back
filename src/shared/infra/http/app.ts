@@ -26,6 +26,10 @@ app.use(
   '/api/v1/product/image',
   express.static(`${upload.tmpFolder}/products`)
 );
+app.use(
+  '/api/v1/category/image',
+  express.static(`${upload.tmpFolder}/categories`)
+);
 
 app.use(
   (err: Error, request: Request, response: Response, next: NextFunction) => {

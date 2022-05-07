@@ -1,5 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
+import { ProductMap } from '@modules/products/mappers/ProductMap';
 import { IProductRepository } from '@modules/products/repositories/IProductRepository';
 import { Product } from '@prisma/client';
 
@@ -14,7 +15,7 @@ class FindAllByCategoryUseCase {
       categoryId,
       Number(limit)
     );
-    return products;
+    return products.map((product) => ProductMap.toDTO(product));
   }
 }
 export { FindAllByCategoryUseCase };

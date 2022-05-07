@@ -42,5 +42,5 @@ export interface IAddToCart {
 
 export interface ICreateCategory {
   name: string;
-  image_file: string | undefined;
+  image_file: string;
 }

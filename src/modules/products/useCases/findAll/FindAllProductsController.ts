@@ -6,8 +6,12 @@ import { FindAllProductsUseCase } from './FindAllProductsUseCase';
 class FindAllProductsController {
   async handle(request: Request, response: Response): Promise<Response> {
     const findAllProductsUseCase = container.resolve(FindAllProductsUseCase);
-    const { limit } = request.query;
-    const products = await findAllProductsUseCase.execute(limit);
+    const { limit, orderField, order } = request.query;
+    const products = await findAllProductsUseCase.execute(
+      limit,
+      orderField,
+      order
+    );
 
     return response.status(200).json(products);
   }

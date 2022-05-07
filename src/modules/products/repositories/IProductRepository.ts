@@ -5,7 +5,7 @@ import { IAddToCart, ICreateProduct, IUpdateProduct } from '../dtos/IProduct';
 interface IProductRepository {
   create(data: ICreateProduct): Promise<Product>;
   findById(id: string): Promise<Product | null>;
-  findAll(limit: number): Promise<Product[]>;
+  findAll(limit: number, orderField: string, order: string): Promise<Product[]>;
   update(data: IUpdateProduct): Promise<Product>;
   delete(id: string): Promise<void>;
   addToCart(data: IAddToCart): Promise<void>;

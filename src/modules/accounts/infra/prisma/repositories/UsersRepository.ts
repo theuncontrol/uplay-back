@@ -115,7 +115,10 @@ class UsersRepository implements IUsersRepository {
     return user;
   }
   async updateAvatar(id: string, avatar?: string): Promise<User> {
-    const user = await prisma.user.update({ where: { id }, data: { avatar } });
+    const user = await prisma.user.update({
+      where: { id },
+      data: { avatar },
+    });
     return user;
   }
 

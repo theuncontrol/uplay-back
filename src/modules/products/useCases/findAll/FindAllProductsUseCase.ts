@@ -10,8 +10,16 @@ class FindAllProductsUseCase {
     @inject('ProductRepository')
     private productRepository: IProductRepository
   ) { }
-  async execute(limit = 1000): Promise<Product[]> {
-    const products = await this.productRepository.findAll(Number(limit));
+  async execute(
+    limit = 1000,
+    orderField = 'id',
+    order = 'asc'
+  ): Promise<Product[]> {
+    const products = await this.productRepository.findAll(
+      Number(limit),
+      orderField,
+      order
+    );
 
     return products.map((product) => ProductMap.toDTO(product));
   }

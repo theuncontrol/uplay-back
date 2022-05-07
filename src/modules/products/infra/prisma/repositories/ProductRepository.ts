@@ -25,6 +25,7 @@ class ProductRepository implements IProductRepository {
     const product = await prisma.product.findMany({
       where: { categoryId },
       take: limit,
+      include: { product_image: true },
     });
 
     return product;
@@ -47,10 +48,17 @@ class ProductRepository implements IProductRepository {
 
     return updateProduct;
   }
-  async findAll(limit: number): Promise<Product[]> {
+  async findAll(
+    limit: number,
+    orderField: string,
+    order: string
+  ): Promise<Product[]> {
     const products = await prisma.product.findMany({
       include: { comments: true, product_image: true },
       take: limit,
+      orderBy: {
+        [orderField]: order,
+      },
     });
     return products;
   }

@@ -1,10 +1,20 @@
-import { Product } from '@prisma/client';
+import { Product, User } from '@prisma/client';
 
 interface IProductImage {
   id: string;
   productId: string;
   image_name: string;
   image_url: string;
+}
+
+interface IComment {
+  id: string;
+  userId: string;
+  created_at: string;
+  updated_at: string;
+  productId: string;
+  comment: string;
+  user: User;
 }
 
 interface IProductResponse {
@@ -16,12 +26,12 @@ interface IProductResponse {
   color: string;
   warranty: string;
   stock: string;
-  note: string;
+  note: string | null;
   description: string;
   reference: string;
-  comments: string;
+  comments: IComment[];
   product_images: IProductImage[];
-  categoryId: string;
+  categoryId: string | null;
 }
 
 class ProductMap {
@@ -51,7 +61,7 @@ class ProductMap {
     comments,
     product_image,
   }: Product): IProductResponse {
-    const product_images = product_image.map((image) => {
+    const product_images = product_image.map((image: IProductImage) => {
       return {
         ...image,
         image_url: this.getImgUrl(image.image_name),

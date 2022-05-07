@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
+import { UserMap } from '@modules/accounts/mappers/UserMap';
+
 import { UpdateUserAvatarUseCase } from './UpdateUserAvatarUseCase';
 
 class UpdateUserAvatarController {
@@ -9,9 +11,14 @@ class UpdateUserAvatarController {
     const avatar_file = request.file?.filename;
 
     const updateUserAvatarUseCase = container.resolve(UpdateUserAvatarUseCase);
-    await updateUserAvatarUseCase.execute({ user_id: id, avatar_file });
+    const user = await updateUserAvatarUseCase.execute({
+      user_id: id,
+      avatar_file,
+    });
 
-    return response.status(204).send();
+    const returnUser = UserMap.toDTO(user);
+
+    return response.status(200).json({ avatar_url: returnUser.avatar_url });
   }
 }
 
