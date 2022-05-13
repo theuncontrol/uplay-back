@@ -1,10 +1,10 @@
 import { Orders } from '@prisma/client';
 
-import { ICreateOrder } from '../dtos/ICreateOrder';
+import { ICreateOrderDTO } from '../dtos/ICreateOrderDTO';
 import { IUpdateOrder } from '../dtos/IUpdateOrder';
 
 interface IOrderRepository {
-  create(data: ICreateOrder): Promise<Orders>;
+  create(data: ICreateOrderDTO): Promise<Orders>;
   delete(id: string): Promise<void>;
   findAll(): Promise<Orders[]>;
   findById(id: string): Promise<Orders | null>;

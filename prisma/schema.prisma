@@ -13,6 +13,8 @@ datasource db {
 model User {
   id         String       @id @default(auto()) @map("_id") @db.ObjectId
   name       String
+  first_name String
+  last_name  String
   email      String       @unique
   phone      String
   password   String
@@ -29,6 +31,8 @@ model User {
   cart       Cart?
   ordersId   String[]
   Orders     Orders[]
+
+
 }
 
 model Favorites {
@@ -150,16 +154,19 @@ model Status {
 }
 
 model Orders {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
-  status         Status?   @relation(fields: [statusId], references: [id])
-  statusId       String    @unique @db.ObjectId
-  userId         String?   @db.ObjectId
-  User           User?     @relation(fields: [userId], references: [id])
-  productsIds    String[]  @db.ObjectId
-  Products       Product[] @relation(fields: [productsIds], references: [id])
-  orderNumber    String
-  trackingNumber String
-  totalPrice     String
-  created_at     DateTime  @default(now())
-  updated_at     DateTime  @updatedAt
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  status            Status?   @relation(fields: [statusId], references: [id])
+  statusId          String    @unique @db.ObjectId
+  userId            String?   @db.ObjectId
+  User              User?     @relation(fields: [userId], references: [id])
+  productsIds       String[]  @db.ObjectId
+  Products          Product[] @relation(fields: [productsIds], references: [id])
+  orderNumber       String
+  trackingNumber    String
+  totalPrice        String
+  paymentStatus     String
+  installments      String
+  installmentsValue String
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
 }

@@ -16,6 +16,8 @@ class UserMap {
   static toDTO({
     email,
     name,
+    first_name,
+    last_name,
     id,
     avatar,
     phone,
@@ -26,6 +28,8 @@ class UserMap {
   }: User): IUserResponseDTO {
     const user = {
       id,
+      first_name,
+      last_name,
       email,
       name,
       phone,

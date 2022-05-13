@@ -1,6 +1,6 @@
 import { prisma } from 'database/prismaClient';
 
-import { ICreateOrder } from '@modules/orders/dtos/ICreateOrder';
+import { ICreateOrderDTO } from '@modules/orders/dtos/ICreateOrderDTO';
 import { IUpdateOrder } from '@modules/orders/dtos/IUpdateOrder';
 import { IOrderRepository } from '@modules/orders/repositories/IOrderRepository';
 import { Orders } from '@prisma/client';
@@ -13,15 +13,21 @@ class OrderRepository implements IOrderRepository {
     orderNumber,
     productsIds,
     totalPrice,
-  }: ICreateOrder): Promise<Orders> {
+    paymentStatus,
+    installments,
+    installmentsValue,
+  }: ICreateOrderDTO): Promise<Orders> {
     const order = await prisma.orders.create({
       data: {
+        paymentStatus,
         userId,
         statusId,
         trackingNumber,
         orderNumber,
         productsIds,
         totalPrice,
+        installments,
+        installmentsValue,
       },
     });
     return order;

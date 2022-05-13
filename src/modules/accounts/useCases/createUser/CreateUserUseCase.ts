@@ -15,9 +15,10 @@ class CreateUserUseCase {
     private usersRepository: IUsersRepository,
     @inject('ProfileRepository')
     private profileRepository: IProfileRepository
-  ) {}
+  ) { }
   async execute({
-    name,
+    first_name,
+    last_name,
     email,
     password,
     password_confirmed,
@@ -38,7 +39,8 @@ class CreateUserUseCase {
     const hashPassword = await hash(password, 10);
 
     const createUser = await this.usersRepository.create({
-      name,
+      first_name,
+      last_name,
       email,
       password: hashPassword,
       phone,

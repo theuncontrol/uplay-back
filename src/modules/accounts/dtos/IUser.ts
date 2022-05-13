@@ -8,7 +8,8 @@ interface IAddress {
 }
 
 interface ICreateUser {
-  name: string;
+  first_name: string;
+  last_name: string;
   password: string;
   password_confirmed?: string;
   email: string;

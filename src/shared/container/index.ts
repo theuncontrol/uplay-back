@@ -9,6 +9,8 @@ import { IProfileRepository } from '@modules/accounts/repositories/IProfileRepos
 import { IResourcesRepository } from '@modules/accounts/repositories/IResourcesRepository';
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { IUsersTokensRepository } from '@modules/accounts/repositories/IUsersTokensRepository';
+import { OrderRepository } from '@modules/orders/infra/prisma/repositories/OrderRepository';
+import { IOrderRepository } from '@modules/orders/repositories/IOrderRepository';
 import { CategoriesRepository } from '@modules/products/infra/prisma/repositories/CategoriesRepository';
 import { CommentsRepository } from '@modules/products/infra/prisma/repositories/CommentsRepository';
 import { ProductImagesRepository } from '@modules/products/infra/prisma/repositories/ProductImagesRepository';
@@ -56,4 +58,9 @@ container.registerSingleton<ICommentsRepository>(
 container.registerSingleton<ICategoriesRepository>(
   'CategoriesRepository',
   CategoriesRepository
+);
+
+container.registerSingleton<IOrderRepository>(
+  'OrderRepository',
+  OrderRepository
 );

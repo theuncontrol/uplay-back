@@ -1,5 +1,5 @@
 import { prisma } from 'database/prismaClient';
-import _ from 'lodash';
+import _, { last } from 'lodash';
 
 import {
   IAddToFavorite,
@@ -32,7 +32,8 @@ class UsersRepository implements IUsersRepository {
     return updatedUser;
   }
   async create({
-    name,
+    first_name,
+    last_name,
     email,
     password,
     phone,
@@ -45,7 +46,9 @@ class UsersRepository implements IUsersRepository {
     });
     const createdUser = await prisma.user.create({
       data: {
-        name,
+        name: `${first_name} ${last_name}`,
+        first_name,
+        last_name,
         email,
         password,
         phone,
@@ -88,6 +91,7 @@ class UsersRepository implements IUsersRepository {
         profile: { include: { resources: true } },
         cart: { include: { productsQtn: true, products: true } },
         favorites: true,
+        Orders: true,
       },
     });
     return users;
@@ -121,7 +125,6 @@ class UsersRepository implements IUsersRepository {
     });
     return user;
   }
-
   async addToFavorite({ userId, productsIds }: IAddToFavorite): Promise<void> {
     await prisma.favorites.update({
       where: { userId },
@@ -130,7 +133,6 @@ class UsersRepository implements IUsersRepository {
       },
     });
   }
-
   async removeToFavorite(userId: string, productId: string): Promise<void> {
     const favorites = await prisma.favorites.findFirst({ where: { userId } });
 

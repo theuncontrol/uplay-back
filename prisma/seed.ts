@@ -65,6 +65,8 @@ async function userAdmin() {
   await prisma.user.create({
     data: {
       name: 'admin',
+      first_name: 'admin',
+      last_name: 'admin',
       password: '$2b$10$KlDU1kGhK8PHF8Kh7CLitelVO5vsP6WYawRo1SNvR1wDTLX4dE/B2',
       email: 'admin_uplay@uplay.com',
       profileId: profile?.id,
@@ -73,10 +75,38 @@ async function userAdmin() {
   });
 }
 
+async function createStatus() {
+  await prisma.status.createMany({
+    data: [
+      {
+        key: 'pending',
+        value: 'Pendente',
+      },
+      {
+        key: 'sent',
+        value: 'Enviado',
+      },
+      {
+        key: 'in_transit',
+        value: 'Em trânsito',
+      },
+      {
+        key: 'received',
+        value: 'Recebido',
+      },
+      {
+        key: 'canceled',
+        value: 'Cancelado',
+      },
+    ],
+  });
+}
+
 async function main() {
   await resources();
   await profiles();
   await userAdmin();
+  await createStatus();
 }
 
 main()
