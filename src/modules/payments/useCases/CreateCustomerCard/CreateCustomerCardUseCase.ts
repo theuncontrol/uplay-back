@@ -8,7 +8,7 @@ import {
 } from '@shared/container/providers/PaymentProvider/IPaymentProvider';
 
 interface IRequest {
-  id: string;
+  user_id: string;
   payment_method_id: string;
   issue_id: string;
   token: string;
@@ -21,9 +21,11 @@ class CreateCustomerCardUseCase {
     private usersRepository: IUsersRepository,
     @inject('PaymentProvider')
     private paymentProvider: IPaymentProvider
-  ) { }
+  ) {
+    //
+  }
   async execute({
-    id,
+    user_id: id,
     payment_method_id,
     issue_id,
     token,
@@ -42,6 +44,8 @@ class CreateCustomerCardUseCase {
       });
     }
     const customer_id = user.id;
+
+    console.log('teste', customer_id, payment_method_id, issue_id, token);
     await this.paymentProvider.createCard({
       customer_id,
       payment_method_id,

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { verify } from 'jsonwebtoken';
+import { TokenExpiredError, verify } from 'jsonwebtoken';
 
 import auth from '@config/auth';
 import { AppError } from '@shared/errors/AppError';
@@ -29,6 +29,10 @@ export async function ensureAuthenticated(
 
     next();
   } catch (error) {
-    throw new AppError('Invalid token!', 401);
+    if (error instanceof TokenExpiredError) {
+      throw new AppError('Token Expired!', 401, 'token.expired');
+    } else {
+      throw new AppError('Invalid token!', 401);
+    }
   }
 }

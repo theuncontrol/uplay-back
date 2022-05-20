@@ -1,12 +1,15 @@
 /* eslint-disable no-param-reassign */
 import { prisma } from 'database/prismaClient';
 import { PaymentCreateResponse } from 'mercadopago/resources/payment';
-import { inject, injectable } from 'tsyringe';
+import { container, inject, injectable } from 'tsyringe';
 
 import { IUsersRepository } from '@modules/accounts/repositories/IUsersRepository';
 import { IOrderRepository } from '@modules/orders/repositories/IOrderRepository';
-import { Orders, Status, User } from '@prisma/client';
+import { IProductRepository } from '@modules/products/repositories/IProductRepository';
+import { Orders, Product, Status, User } from '@prisma/client';
 import { IPaymentProvider } from '@shared/container/providers/PaymentProvider/IPaymentProvider';
+
+import { CreateCustomerCardUseCase } from '../CreateCustomerCard/CreateCustomerCardUseCase';
 
 interface IIdentification {
   type: string;
@@ -26,6 +29,8 @@ export interface IPaymentDTO {
   installments: number;
   description: string;
   payer: IPayer;
+  saveDataValue: boolean;
+  productsIds: string[];
 }
 
 interface IResponse {
@@ -41,7 +46,9 @@ class ProcessPaymentUseCase {
     @inject('PaymentProvider')
     private paymentProvider: IPaymentProvider,
     @inject('OrderRepository')
-    private orderRepository: IOrderRepository
+    private orderRepository: IOrderRepository,
+    @inject('ProductRepository')
+    private productRepository: IProductRepository
   ) {
     //
   }
@@ -69,17 +76,40 @@ class ProcessPaymentUseCase {
   }
 
   async execute(body: IPaymentDTO, id: string): Promise<IResponse> {
+    const createCustomerCardUseCase = container.resolve(
+      CreateCustomerCardUseCase
+    );
+
     let order;
-    const { email } = (await this.usersRepository.findById(id)) as User;
+
+    const { email, first_name, last_name } =
+      (await this.usersRepository.findById(id)) as User;
     body.payer.email = email;
+
     const createPayment = await this.paymentProvider.paymentCreate(body);
-    const productsIds = ['6272845716f4a5c798ee5dbb'];
+
+    const { productsIds } = body;
 
     if (createPayment.response.status === 'approved') {
       const { id: statusId } = (await prisma.status.findFirst({
         where: { key: 'pending' },
       })) as Status;
+
       order = await this.createOrder(createPayment, productsIds, id, statusId);
+      if (order) {
+        productsIds.map(async (product: string) => {
+          await this.productRepository.removeToCart(id, product);
+        });
+      }
+
+      // if (body.saveDataValue === true) {
+      //   await createCustomerCardUseCase.execute({
+      //     user_id: id,
+      //     issue_id: body.issuer_id,
+      //     payment_method_id: 'credit_card',
+      //     token: body.token,
+      //   });
+      // }
     } else if (createPayment.response.status === 'rejected') {
       const { id: statusId } = (await prisma.status.findFirst({
         where: { key: 'canceled' },

@@ -8,10 +8,10 @@ class CreateCustomerCardController {
     const createCustomCardUseCase = container.resolve(
       CreateCustomerCardUseCase
     );
-    const { id } = request.user;
+    const { id: user_id } = request.user;
     const { payment_method_id, issue_id, token } = request.body;
     await createCustomCardUseCase.execute({
-      id,
+      user_id,
       payment_method_id,
       issue_id,
       token,

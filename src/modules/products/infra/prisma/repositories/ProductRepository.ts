@@ -8,7 +8,7 @@ import {
   IUpdateProduct,
 } from '@modules/products/dtos/IProduct';
 import { IProductRepository } from '@modules/products/repositories/IProductRepository';
-import { Product } from '@prisma/client';
+import { Cart, Product } from '@prisma/client';
 
 class ProductRepository implements IProductRepository {
   async findById(id: string): Promise<Product | null> {
@@ -141,10 +141,10 @@ class ProductRepository implements IProductRepository {
   }
 
   async removeToCart(userId: string, productId: string): Promise<void> {
-    const cart = await prisma.cart.findFirst({
+    const cart = (await prisma.cart.findFirst({
       where: { userId },
       include: { productsQtn: true },
-    });
+    })) as Cart;
     const productQtn = await prisma.productQtn.findFirst({
       where: { cartId: cart?.id, productId },
     });
