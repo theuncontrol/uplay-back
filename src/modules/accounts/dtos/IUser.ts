@@ -1,10 +1,13 @@
 interface IAddress {
+  name: string;
   street: string;
   city: string;
   province: string;
   state: string;
   number: string;
-  complement: string;
+  complement?: string;
+  district: string;
+  cep: string;
 }
 
 interface ICreateUser {
@@ -14,7 +17,7 @@ interface ICreateUser {
   password_confirmed?: string;
   email: string;
   phone: string;
-  address: [];
+  address: IAddress;
   profileId?: string;
 }
 

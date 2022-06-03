@@ -21,7 +21,6 @@ class UsersRepository implements IUsersRepository {
     const updatedUser = await prisma.user.update({
       where: { id },
       data: {
-        address,
         email,
         name,
         phone,
@@ -52,11 +51,14 @@ class UsersRepository implements IUsersRepository {
         email,
         password,
         phone,
-        address,
         profileId: profile?.id,
+        address: {
+          create: address,
+        },
       },
       include: {
         profile: { include: { resources: true } },
+        address: true,
       },
     });
 
@@ -81,6 +83,7 @@ class UsersRepository implements IUsersRepository {
         profile: true,
         cart: { include: { products: true, productsQtn: true } },
         favorites: true,
+        address: true,
       },
     });
     return user;
@@ -92,6 +95,7 @@ class UsersRepository implements IUsersRepository {
         cart: { include: { productsQtn: true, products: true } },
         favorites: true,
         Orders: true,
+        address: true,
       },
     });
     return users;

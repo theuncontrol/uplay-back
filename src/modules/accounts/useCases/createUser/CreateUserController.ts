@@ -14,6 +14,7 @@ class CreateUserController {
       phone,
       address,
     } = request.body;
+    console.log(address);
     const createUserUseCase = container.resolve(CreateUserUseCase);
 
     const createUser = await createUserUseCase.execute({

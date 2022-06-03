@@ -25,14 +25,30 @@ model User {
   profile    Profile?     @relation(fields: [profileId], references: [id])
   UserToken  UserTokens[]
   profileId  String?      @db.ObjectId
-  address    Json?
+  address    Address[]
   favorites  Favorites?
   Comments   Comments[]
   cart       Cart?
   ordersId   String[]
   Orders     Orders[]
+}
 
+model Address {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  street     String
+  city       String
+  number     String
+  district   String
+  cep        String
+  state      String
+  complement String?
+  province   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String? @unique @db.ObjectId
 }
 
 model Favorites {
